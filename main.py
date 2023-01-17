@@ -8,10 +8,13 @@ pygame.display.set_caption('Runner')
 clock = pygame.time.Clock()
 testFont = pygame.font.Font('font/Pixeltype.ttf', 50)
 
-# SKY GROUND & TEXT SURFACES
+# SKY & GROUND SURFACES
 skySurface = pygame.image.load('graphics/Sky.png').convert()
 groundSurface = pygame.image.load('graphics/ground.png').convert()
-textSurface = testFont.render('My game', False, 'Black')
+
+# SCORE
+scoreSurface = testFont.render('SCORE', False, 'Black')
+scoreRectangle = scoreSurface.get_rect(center = (400,50))
 
 # SNAIL
 snailSurface = pygame.image.load('graphics/snail/snail1.png').convert_alpha()
@@ -30,20 +33,31 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+        
+        # if event.type == pygame.MOUSEMOTION:
+        #     if playerRectangle.collidepoint(event.pos): print('collision')
 
-    # SKY GROUND & TEXT RENDERER
+    # SKY GROUND & SCORE RENDERER
     screen.blit(skySurface, (0,0))
     screen.blit(groundSurface, (0,300))
-    screen.blit(textSurface, (300,50))
+    pygame.draw.rect(screen,'Pink',scoreRectangle)
+    screen.blit(scoreSurface, scoreRectangle)
 
     # SNAIL MOVEMENT
-    snailRectangle.left -= 4
-    if snailXPos < -100: snailXPos = 800
+    snailRectangle.x -= 4
+    if snailRectangle.right < 0: snailRectangle.left = 800
 
     # SNAIL & PLAYER RENDERER
     screen.blit(snailSurface, snailRectangle)
     screen.blit(playerSurface, playerRectangle)
 
+    # COLLISION DETETCION
+    if playerRectangle.colliderect(snailRectangle):
+        pass
+
+    # mousePos = pygame.mouse.get_pos()
+    # if playerRectangle.collidepoint(mousePos): print('collision')
+
     # RUNTIME FUNCTIONS
     pygame.display.update()
-    clock.tick(60) 
+    clock.tick(60)
